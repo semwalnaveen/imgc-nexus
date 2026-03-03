@@ -11,6 +11,7 @@ import DDE from "./pages/DDE";
 import Underwriting from "./pages/Underwriting";
 import Claims from "./pages/Claims";
 import Finance from "./pages/Finance";
+import Servicing from "./pages/Servicing";
 import Reports from "./pages/Reports";
 import MasterSetup from "./pages/MasterSetup";
 import AuditLogs from "./pages/AuditLogs";
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/underwriting" element={<Underwriting />} />
             <Route path="/claims" element={<Claims />} />
             <Route path="/finance" element={<Finance />} />
+            <Route path="/servicing" element={<Servicing />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/master-setup" element={<MasterSetup />} />
             <Route path="/audit-logs" element={<AuditLogs />} />
