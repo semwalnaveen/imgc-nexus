@@ -16,6 +16,7 @@ const mainItems = [
   { title: "DDE", url: "/dde", icon: FileText },
   { title: "Underwriting", url: "/underwriting", icon: Brain },
   { title: "Claims", url: "/claims", icon: ShieldAlert },
+  { title: "Servicing", url: "/servicing", icon: ClipboardList },
   { title: "Finance", url: "/finance", icon: Wallet },
 ];
 
