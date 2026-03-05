@@ -13,11 +13,11 @@ import {
 } from "recharts";
 
 const pipelineData = [
-  { stage: "QDE", count: 124 },
   { stage: "DDE", count: 89 },
   { stage: "UW", count: 67 },
   { stage: "Approved", count: 45 },
-  { stage: "Issued", count: 38 },
+  { stage: "Queried", count: 28 },
+  { stage: "Rejected", count: 12 },
 ];
 
 const stageData = [
