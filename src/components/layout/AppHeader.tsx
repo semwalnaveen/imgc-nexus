@@ -10,9 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/use-theme";
+import { useRole } from "@/contexts/RoleContext";
+import { useNavigate } from "react-router-dom";
 
 export function AppHeader() {
   const { theme, toggleTheme } = useTheme();
+  const { role } = useRole();
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-card px-4 enterprise-shadow-sm">
@@ -63,24 +67,34 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 px-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-semibold">
-                NK
+                {role.initials}
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium leading-none">Naveen Kumar</p>
-                <p className="text-xs text-muted-foreground">Underwriter</p>
+                <p className="text-sm font-medium leading-none">{role.userName}</p>
+                <p className="text-xs text-muted-foreground">{role.label}</p>
               </div>
               <ChevronDown className="h-3 w-3 text-muted-foreground hidden md:block" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuContent align="end" className="w-56">
             <div className="px-2 py-1.5">
-              <p className="text-xs text-muted-foreground">Welcome Naveen – Underwriter</p>
+              <p className="text-sm font-medium">Welcome {role.userName.split(" ")[0]}</p>
+              <p className="text-xs text-muted-foreground">{role.label}</p>
+              <div className="flex flex-wrap gap-1 mt-1.5">
+                {role.permissions.map((p) => (
+                  <span key={p} className="inline-flex rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                    {p}
+                  </span>
+                ))}
+              </div>
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile Settings</DropdownMenuItem>
             <DropdownMenuItem>Preferences</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">Sign Out</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive" onClick={() => navigate("/")}>
+              Sign Out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
