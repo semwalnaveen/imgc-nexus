@@ -234,11 +234,19 @@ export default function Login() {
             )}
           </form>
 
-          <div className="rounded-lg bg-muted/50 border p-3 flex items-start gap-2">
-            <Shield className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-            <p className="text-xs text-muted-foreground">
-              This is a secured system. Unauthorized access is prohibited and monitored. Session timeout: 30 minutes.
-            </p>
+          <div className="rounded-lg bg-muted/50 border p-3 space-y-2">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-muted-foreground shrink-0" />
+              <p className="text-xs font-medium text-muted-foreground">Demo Credentials</p>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs text-muted-foreground">
+              <span>Email:</span>
+              <span className="font-mono text-foreground">rajesh.kumar@imgc.com</span>
+              <span>Password:</span>
+              <span className="font-mono text-foreground">password123</span>
+              <span>OTP:</span>
+              <span className="font-mono text-foreground">any 6 digits</span>
+            </div>
           </div>
           <div className="flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
             <a href="#" className="hover:text-foreground">Privacy Policy</a>
