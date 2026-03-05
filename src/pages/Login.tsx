@@ -153,6 +153,13 @@ export default function Login() {
               This is a secured system. Unauthorized access is prohibited and monitored. Session timeout: 30 minutes.
             </p>
           </div>
+          <div className="flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
+            <a href="#" className="hover:text-foreground">Privacy Policy</a>
+            <span>·</span>
+            <span>v2.4.1</span>
+            <span>·</span>
+            <a href="#" className="hover:text-foreground">Support: helpdesk@imgc.com</a>
+          </div>
         </motion.div>
       </div>
     </div>

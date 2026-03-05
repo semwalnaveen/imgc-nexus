@@ -16,6 +16,10 @@ import Reports from "./pages/Reports";
 import MasterSetup from "./pages/MasterSetup";
 import AuditLogs from "./pages/AuditLogs";
 import Admin from "./pages/Admin";
+import LenderManagement from "./pages/LenderManagement";
+import Loan360 from "./pages/Loan360";
+import ArchitectureDashboard from "./pages/ArchitectureDashboard";
+import SearchPage from "./pages/SearchPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +34,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/service-desk" element={<ServiceDesk />} />
             <Route path="/dde" element={<DDE />} />
             <Route path="/underwriting" element={<Underwriting />} />
@@ -40,6 +45,9 @@ const App = () => (
             <Route path="/master-setup" element={<MasterSetup />} />
             <Route path="/audit-logs" element={<AuditLogs />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/lender-management" element={<LenderManagement />} />
+            <Route path="/loan-360" element={<Loan360 />} />
+            <Route path="/architecture" element={<ArchitectureDashboard />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
