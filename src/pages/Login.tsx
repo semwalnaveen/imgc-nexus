@@ -2,23 +2,31 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Shield, Eye, EyeOff, Smartphone, Lock, Mail } from "lucide-react";
+import { Shield, Eye, EyeOff, Smartphone, Lock, Mail, Check, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { ROLES, UserRole, useRole } from "@/contexts/RoleContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [step, setStep] = useState<"credentials" | "mfa">("credentials");
+  const [step, setStep] = useState<"credentials" | "role" | "mfa">("credentials");
+  const [selectedRole, setSelectedRole] = useState<UserRole>("underwriter");
+  const { setRole } = useRole();
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (step === "credentials") {
+      setStep("role");
+    } else if (step === "role") {
+      setRole(selectedRole);
       setStep("mfa");
     } else {
       navigate("/dashboard");
     }
   };
+
+  const selectedRoleConfig = ROLES.find((r) => r.id === selectedRole)!;
 
   return (
     <div className="min-h-screen flex">
@@ -55,12 +63,12 @@ export default function Login() {
       </div>
 
       {/* Right Panel - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-background">
+      <div className="flex-1 flex items-center justify-center p-6 bg-background overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="w-full max-w-md space-y-8"
+          className="w-full max-w-md space-y-6"
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-3 justify-center mb-8">
@@ -72,11 +80,17 @@ export default function Login() {
 
           <div>
             <h2 className="text-2xl font-bold">
-              {step === "credentials" ? "Sign in to PAS" : "Verify Your Identity"}
+              {step === "credentials"
+                ? "Sign in to PAS"
+                : step === "role"
+                ? "Select Your Role"
+                : "Verify Your Identity"}
             </h2>
             <p className="text-muted-foreground mt-1 text-sm">
               {step === "credentials"
                 ? "Enter your credentials to access the system"
+                : step === "role"
+                ? "Choose a role to test the application with"
                 : "Enter the OTP sent to your registered device"}
             </p>
           </div>
@@ -128,8 +142,81 @@ export default function Login() {
                   Azure AD SSO
                 </Button>
               </>
+            ) : step === "role" ? (
+              <>
+                <div className="space-y-3">
+                  {ROLES.map((role) => (
+                    <button
+                      key={role.id}
+                      type="button"
+                      onClick={() => setSelectedRole(role.id)}
+                      className={`w-full text-left rounded-lg border-2 p-4 transition-all ${
+                        selectedRole === role.id
+                          ? "border-primary bg-primary/5 shadow-sm"
+                          : "border-border hover:border-muted-foreground/30 hover:bg-muted/50"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ${
+                              selectedRole === role.id
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground"
+                            }`}
+                          >
+                            {role.initials}
+                          </div>
+                          <div>
+                            <p className="font-medium text-sm text-foreground">{role.label}</p>
+                            <p className="text-xs text-muted-foreground">{role.userName}</p>
+                          </div>
+                        </div>
+                        {selectedRole === role.id && (
+                          <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                        )}
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {role.permissions.map((perm) => (
+                          <span
+                            key={perm}
+                            className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                          >
+                            {perm}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-[11px] text-muted-foreground">
+                        {role.menuAccess.length} menu items accessible
+                      </p>
+                    </button>
+                  ))}
+                </div>
+
+                <Button type="submit" className="w-full" size="lg">
+                  <Users className="mr-2 h-4 w-4" />
+                  Continue as {selectedRoleConfig.label}
+                </Button>
+
+                <button
+                  type="button"
+                  onClick={() => setStep("credentials")}
+                  className="w-full text-center text-sm text-primary hover:underline"
+                >
+                  ← Back to credentials
+                </button>
+              </>
             ) : (
               <>
+                <div className="rounded-lg border bg-muted/30 p-3 flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                    {selectedRoleConfig.initials}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{selectedRoleConfig.userName}</p>
+                    <p className="text-xs text-muted-foreground">{selectedRoleConfig.label}</p>
+                  </div>
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="otp">One-Time Password</Label>
                   <div className="relative">
@@ -140,7 +227,7 @@ export default function Login() {
                 </div>
                 <Button type="submit" className="w-full" size="lg">Verify & Continue</Button>
                 <div className="flex justify-between text-sm">
-                  <button type="button" onClick={() => setStep("credentials")} className="text-primary hover:underline">← Back</button>
+                  <button type="button" onClick={() => setStep("role")} className="text-primary hover:underline">← Back</button>
                   <button type="button" className="text-primary hover:underline">Resend OTP</button>
                 </div>
               </>

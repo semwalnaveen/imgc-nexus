@@ -10,9 +10,10 @@ import {
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useRole } from "@/contexts/RoleContext";
 
 const mainItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Search", url: "/search", icon: Search },
   { title: "Service Desk (QDE)", url: "/service-desk", icon: Headphones },
   { title: "DDE", url: "/dde", icon: FileText },
@@ -39,51 +40,54 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const { role } = useRole();
   const isActive = (path: string) => location.pathname === path;
 
-  const renderItems = (items: typeof mainItems) => (
-    <SidebarMenu>
-      {items.map((item) => (
-        <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton asChild isActive={isActive(item.url)}>
-            <NavLink
-              to={item.url}
-              end={item.url === "/"}
-              className="hover:bg-sidebar-accent/80"
-              activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
-            >
-              <item.icon className="h-4 w-4 shrink-0" />
-              {!collapsed && <span>{item.title}</span>}
-            </NavLink>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      ))}
-    </SidebarMenu>
-  );
+  const filterByAccess = (items: typeof mainItems) =>
+    items.filter((item) => role.menuAccess.includes(item.url));
+
+  const renderItems = (items: typeof mainItems) => {
+    const filtered = filterByAccess(items);
+    if (filtered.length === 0) return null;
+    return (
+      <SidebarMenu>
+        {filtered.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild isActive={isActive(item.url)}>
+              <NavLink
+                to={item.url}
+                className="hover:bg-sidebar-accent/80"
+                activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+              >
+                <item.icon className="h-4 w-4 shrink-0" />
+                {!collapsed && <span>{item.title}</span>}
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    );
+  };
+
+  const renderGroup = (label: string, items: typeof mainItems) => {
+    const filtered = filterByAccess(items);
+    if (filtered.length === 0) return null;
+    return (
+      <SidebarGroup>
+        <SidebarGroupLabel className="text-sidebar-muted text-[10px] uppercase tracking-wider">
+          {!collapsed && label}
+        </SidebarGroupLabel>
+        <SidebarGroupContent>{renderItems(items)}</SidebarGroupContent>
+      </SidebarGroup>
+    );
+  };
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarContent className="pt-2">
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-muted text-[10px] uppercase tracking-wider">
-            {!collapsed && "Operations"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-muted text-[10px] uppercase tracking-wider">
-            {!collapsed && "Management"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(managementItems)}</SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-muted text-[10px] uppercase tracking-wider">
-            {!collapsed && "Administration"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>{renderItems(adminItems)}</SidebarGroupContent>
-        </SidebarGroup>
+        {renderGroup("Operations", mainItems)}
+        {renderGroup("Management", managementItems)}
+        {renderGroup("Administration", adminItems)}
       </SidebarContent>
     </Sidebar>
   );
