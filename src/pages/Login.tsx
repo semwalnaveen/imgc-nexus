@@ -16,7 +16,7 @@ export default function Login() {
     if (step === "credentials") {
       setStep("mfa");
     } else {
-      navigate("/");
+      navigate("/dashboard");
     }
   };
 
