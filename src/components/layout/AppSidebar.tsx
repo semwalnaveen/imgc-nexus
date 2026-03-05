@@ -1,6 +1,7 @@
 import {
   LayoutDashboard, FileText, ClipboardList, Brain, ShieldAlert,
-  Wallet, BarChart3, Settings, History, UserCog, Layers, Headphones,
+  Wallet, BarChart3, Settings, History, UserCog, Headphones,
+  Building2, Search, Layers, Cpu,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -12,6 +13,7 @@ import {
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Search", url: "/search", icon: Search },
   { title: "Service Desk (QDE)", url: "/service-desk", icon: Headphones },
   { title: "DDE", url: "/dde", icon: FileText },
   { title: "Underwriting", url: "/underwriting", icon: Brain },
@@ -20,11 +22,17 @@ const mainItems = [
   { title: "Finance", url: "/finance", icon: Wallet },
 ];
 
-const adminItems = [
+const managementItems = [
+  { title: "Lender Management", url: "/lender-management", icon: Building2 },
+  { title: "Loan 360°", url: "/loan-360", icon: Layers },
   { title: "MIS & Reports", url: "/reports", icon: BarChart3 },
+];
+
+const adminItems = [
   { title: "Master Setup", url: "/master-setup", icon: Settings },
   { title: "Audit Logs", url: "/audit-logs", icon: History },
   { title: "Admin", url: "/admin", icon: UserCog },
+  { title: "Architecture", url: "/architecture", icon: Cpu },
 ];
 
 export function AppSidebar() {
@@ -61,6 +69,13 @@ export function AppSidebar() {
             {!collapsed && "Operations"}
           </SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(mainItems)}</SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-sidebar-muted text-[10px] uppercase tracking-wider">
+            {!collapsed && "Management"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(managementItems)}</SidebarGroupContent>
         </SidebarGroup>
 
         <SidebarGroup>

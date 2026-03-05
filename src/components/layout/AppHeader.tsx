@@ -1,4 +1,4 @@
-import { Bell, Search, ChevronDown, Shield } from "lucide-react";
+import { Bell, Search, ChevronDown, Shield, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -9,10 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { useTheme } from "@/hooks/use-theme";
 
 export function AppHeader() {
-  const [searchOpen, setSearchOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-card px-4 enterprise-shadow-sm">
@@ -45,6 +45,11 @@ export function AppHeader() {
 
       {/* Right side */}
       <div className="flex items-center gap-2">
+        {/* Theme Toggle */}
+        <Button variant="ghost" size="icon" onClick={toggleTheme} title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}>
+          {theme === "light" ? <Moon className="h-4 w-4 text-muted-foreground" /> : <Sun className="h-4 w-4 text-muted-foreground" />}
+        </Button>
+
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-4 w-4 text-muted-foreground" />
@@ -58,16 +63,20 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 px-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-semibold">
-                RK
+                NK
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium leading-none">Rajesh Kumar</p>
+                <p className="text-sm font-medium leading-none">Naveen Kumar</p>
                 <p className="text-xs text-muted-foreground">Underwriter</p>
               </div>
               <ChevronDown className="h-3 w-3 text-muted-foreground hidden md:block" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
+            <div className="px-2 py-1.5">
+              <p className="text-xs text-muted-foreground">Welcome Naveen – Underwriter</p>
+            </div>
+            <DropdownMenuSeparator />
             <DropdownMenuItem>Profile Settings</DropdownMenuItem>
             <DropdownMenuItem>Preferences</DropdownMenuItem>
             <DropdownMenuSeparator />
